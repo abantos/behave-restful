@@ -22,3 +22,8 @@ def step_impl(context):
 @given('request parameters')
 def step_impl(context):
     _builder.set_request_params(context, context.table)
+
+
+@given("request form-data")
+def step_impl(context):
+    _builder.set_form_data(context, context.table)
