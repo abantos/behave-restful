@@ -29,3 +29,17 @@ def set_request_headers(context, headers):
     resolve = context.vars.resolve
     resolved_headers = {resolve(header['param']): resolve(header['value']) for header in headers}
     context.request_headers = resolved_headers
+
+def set_form_data(context, table):
+    """
+    """
+    resolve = context.vars.resolve
+    data = {}
+    files = {}
+    for row in table:
+        name = resolve(row["param"])
+        value = resolve(row["value"])
+        if row["type"] == "file": files[name] = value
+        else: data[name] = value
+    context.request_form_data = data
+    context.request_files = files
