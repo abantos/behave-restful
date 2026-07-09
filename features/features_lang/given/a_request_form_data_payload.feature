@@ -4,7 +4,7 @@ Feature: Step given a request form-data payload
 
     Scenario: Sets the specified form-data payload in the context
         Given a request form-data payload
-            | key      | value                    | type |
+            | key        | value                    | type |
             | timesheet  | features/files/test.csv  | file |
             | projectId  | 123                      | text |
         Then the context contains request form-data file timesheet with value set to features/files/test.csv
