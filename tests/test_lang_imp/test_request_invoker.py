@@ -151,7 +151,7 @@ class TestRequestInvokerFileUpload(unittest.TestCase):
         self.context.request_headers = {"foo": 56, "bar": "baz"}
         self.file_path = self._create_temp_file(suffix=".txt")
         self.context.request_files = {"attachment": self.file_path}
-        self.context.request_form_data = {"description": "a file"}
+        self.context.request_form_data_payload = {"description": "a file"}
 
     def _create_temp_file(self, suffix):
         handle, path = tempfile.mkstemp(suffix=suffix)
@@ -196,10 +196,10 @@ class TestRequestInvokerFileUpload(unittest.TestCase):
 
     def test_sends_form_data_with_files(self):
         _invoker.send_post(self.context)
-        assert_that(self.session.request_data).is_same_as(self.context.request_form_data)
+        assert_that(self.session.request_data).is_same_as(self.context.request_form_data_payload)
 
     def test_form_data_is_optional(self):
-        del self.context.request_form_data
+        del self.context.request_form_data_payload
         _invoker.send_post(self.context)
         assert_that(self.session.request_data).is_none()
 
@@ -219,7 +219,7 @@ class TestRequestInvokerFileUpload(unittest.TestCase):
         file_name, _, content_type = self._sent_file()
         assert_that(file_name).is_equal_to(os.path.basename(self.file_path))
         assert_that(content_type).is_equal_to("text/plain")
-        assert_that(self.session.request_data).is_same_as(self.context.request_form_data)
+        assert_that(self.session.request_data).is_same_as(self.context.request_form_data_payload)
 
     def test_put_stores_response_in_context(self):
         _invoker.send_put(self.context)
@@ -232,7 +232,7 @@ class TestRequestInvokerFileUpload(unittest.TestCase):
         file_name, _, content_type = self._sent_file()
         assert_that(file_name).is_equal_to(os.path.basename(self.file_path))
         assert_that(content_type).is_equal_to("text/plain")
-        assert_that(self.session.request_data).is_same_as(self.context.request_form_data)
+        assert_that(self.session.request_data).is_same_as(self.context.request_form_data_payload)
 
     def test_patch_stores_response_in_context(self):
         _invoker.send_patch(self.context)

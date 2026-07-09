@@ -42,6 +42,16 @@ def step_impl(context):
     assert_that(context.request_json_payload).is_equal_to(expected_payload)
 
 
+@then('the context contains request form-data text {key} with value set to {value}')
+def step_impl(context, key, value):
+    assert_that(context.request_form_data_payload[key]).is_equal_to(value)
+
+
+@then('the context contains request form-data file {key} with value set to {value}')
+def step_impl(context, key, value):
+    assert_that(context.request_files[key]).is_equal_to(value)
+
+
 @then('the session {name} property is {value}')
 def step_impl(context, name, value):
     expected_value = eval(value)
