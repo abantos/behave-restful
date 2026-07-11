@@ -7,7 +7,7 @@ bolt.register_module_tasks(bolt_br)
 
 # DEVELOPMENT TASKS
 bolt.register_task('default', [
-    'pip',
+    # 'pip',
     'run-unit-tests',
     'run-feature-tests'
 ])
@@ -128,7 +128,7 @@ config = {
             'options': {
                 'format': 'progress2',
                 'tags': [
-                    ['~@disabled'], 
+                    ['~@disabled'],
                     ['~@wip']
                 ],
                 'junit': True,
