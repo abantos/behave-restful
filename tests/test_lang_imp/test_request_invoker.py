@@ -148,7 +148,7 @@ class TestRequestInvokerFileUpload(unittest.TestCase):
         self.context.session = self.session
         self.context.request_url = "http://my.server.com/resource"
         self.context.request_params = {"foo": 56, "bar": "baz"}
-        self.context.request_headers = {"foo": 56, "bar": "baz"}
+        self.context.request_headers = {"baz": 57, "qux": "quux"}
         self.file_path = self._create_temp_file(suffix=".txt")
         self.context.request_files = {"attachment": self.file_path}
         self.context.request_form_data_payload = {"description": "a file"}
