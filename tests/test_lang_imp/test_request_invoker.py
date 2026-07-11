@@ -153,15 +153,6 @@ class TestRequestInvokerFileUpload(unittest.TestCase):
         self.context.request_files = {"attachment": self.file_path}
         self.context.request_form_data_payload = {"description": "a file"}
 
-    def _create_temp_file(self, suffix):
-        handle, path = tempfile.mkstemp(suffix=suffix)
-        with os.fdopen(handle, "wb") as f: f.write(b"file content")
-        self.addCleanup(os.remove, path)
-        return path
-
-    def _sent_file(self, field="attachment"):
-        return self.session.request_files[field]
-
     # send_post()
     def test_invokes_post_on_session(self):
         _invoker.send_post(self.context)
@@ -237,6 +228,15 @@ class TestRequestInvokerFileUpload(unittest.TestCase):
     def test_patch_stores_response_in_context(self):
         _invoker.send_patch(self.context)
         assert_that(self.context.response).is_same_as(self.response)
+
+    def _create_temp_file(self, suffix):
+        handle, path = tempfile.mkstemp(suffix=suffix)
+        with os.fdopen(handle, "wb") as f: f.write(b"file content")
+        self.addCleanup(os.remove, path)
+        return path
+
+    def _sent_file(self, field="attachment"):
+        return self.session.request_files[field]
 
 
 class SessionDouble(object):
