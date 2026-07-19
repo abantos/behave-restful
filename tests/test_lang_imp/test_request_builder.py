@@ -16,7 +16,8 @@ class TestBuilderInterface(unittest.TestCase):
             'OBJECT_ID': 5,
             'OBJECT_NAME': 'resolved name',
             'PARAM1': 'resolved_param1',
-            'PARAM2': 'resolved_param2'
+            'PARAM2': 'resolved_param2',
+            'FILE_PATH': 'data/resolved_file.txt'
         }
         self.vars_manager = _definitions.VarsManager()
         self.vars_manager.add_vars(self.vars)
@@ -112,6 +113,42 @@ class TestBuilderInterface(unittest.TestCase):
         _builder.set_request_headers(self.context, actual_headers)
         assert_that(self.context.request_headers).is_equal_to(expected_headers)
 
+
+    def test_form_data_fields_are_set_in_context(self):
+        actual_form_data = FormDataTableDouble()
+        expected_form_data = {'description': 'a file'}
+        _builder.set_form_data_payload(self.context, actual_form_data)
+        assert_that(self.context.request_form_data_payload).is_equal_to(expected_form_data)
+
+
+    def test_form_data_file_fields_are_set_in_context(self):
+        actual_form_data = FormDataTableDouble()
+        expected_files = {'attachment': 'data/a_file.txt'}
+        _builder.set_form_data_payload(self.context, actual_form_data)
+        assert_that(self.context.request_files).is_equal_to(expected_files)
+
+
+    def test_form_data_values_are_resolved(self):
+        actual_form_data = FormDataTableDouble(resolve_values=True)
+        _builder.set_form_data_payload(self.context, actual_form_data)
+        assert_that(self.context.request_form_data_payload).is_equal_to({'description': 'resolved name'})
+        assert_that(self.context.request_files).is_equal_to({'attachment': 'data/resolved_file.txt'})
+
+
+    def test_form_data_names_are_resolved(self):
+        actual_form_data = FormDataTableDouble(resolve_names=True)
+        _builder.set_form_data_payload(self.context, actual_form_data)
+        assert_that(self.context.request_form_data_payload).is_equal_to({'resolved_param1': 'foo'})
+        assert_that(self.context.request_files).is_equal_to({'resolved_param2': 'data/a_file.txt'})
+
+
+    def test_form_data_files_are_empty_when_no_file_fields(self):
+        actual_form_data = FormDataTableDouble(text_only=True)
+        _builder.set_form_data_payload(self.context, actual_form_data)
+        assert_that(self.context.request_form_data_payload).is_equal_to({'description': 'a file'})
+        assert_that(self.context.request_files).is_equal_to({})
+
+
 class ContextDouble(object):
     pass
 
@@ -143,6 +180,42 @@ class TableDouble(object):
             yield {'param': 'name',
                    'value': 'foo_bar'}
 
+
+class FormDataTableDouble(object):
+    def __init__(self, resolve_values=False, resolve_names=False, text_only=False):
+        self.resolve_values = resolve_values
+        self.resolve_names = resolve_names
+        self.text_only = text_only
+
+    def __iter__(self):
+        if self.resolve_values:
+            yield {'key': 'description',
+                   'value': '${OBJECT_NAME}',
+                   'type': 'text'}
+            yield {'key': 'attachment',
+                   'value': '${FILE_PATH}',
+                   'type': 'file'}
+
+        elif self.resolve_names:
+            yield {'key': '${PARAM1}',
+                   'value': 'foo',
+                   'type': 'text'}
+            yield {'key': '${PARAM2}',
+                   'value': 'data/a_file.txt',
+                   'type': 'file'}
+
+        elif self.text_only:
+            yield {'key': 'description',
+                   'value': 'a file',
+                   'type': 'text'}
+
+        else:
+            yield {'key': 'description',
+                   'value': 'a file',
+                   'type': 'text'}
+            yield {'key': 'attachment',
+                   'value': 'data/a_file.txt',
+                   'type': 'file'}
 
 
 if __name__=="__main__":
