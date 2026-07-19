@@ -1,15 +1,15 @@
 # Behave Restful
 
-[![Build Status](https://travis-ci.org/behave-restful/behave-restful.svg?branch=master)](https://travis-ci.org/behave-restful/behave-restful)
+[![build](https://github.com/abantos/behave-restful/actions/workflows/python-verify-library.yml/badge.svg)](https://github.com/abantos/behave-restful/actions/workflows/python-verify-library.yml)
 
-Behave Restful is a Behavior Driven Development (BDD) framework based on 
-[behave](https://pythonhosted.org/behave/), that implements a language suitable 
-to test and validate REST APIs and Services. It leverages the power of the 
-[gherkin](https://github.com/cucumber/cucumber/wiki/Gherkin) language to write 
+Behave Restful is a Behavior Driven Development (BDD) framework based on
+[behave](https://pythonhosted.org/behave/), that implements a language suitable
+to test and validate REST APIs and Services. It leverages the power of the
+[gherkin](https://github.com/cucumber/cucumber/wiki/Gherkin) language to write
 business readable tests that validate the behavior of REST APIs.
 
-Although, Behave Restful is implemented in [python](http://www.python.org) and 
-uses [behave](https://pythonhosted.org/behave/) as underlying framework, it can 
+Although, Behave Restful is implemented in [python](http://www.python.org) and
+uses [behave](https://pythonhosted.org/behave/) as underlying framework, it can
 test services implemented in any language as easy as:
 
 ```gherkin
@@ -56,8 +56,8 @@ Feature: API to add a new book to our collection
 As you can see in the example, we send a POST request to the specified url with
 a JSON payload, and we can validate the result very easy. First, we verify that
 the status of the response is CREATED (it succeeds). Then we validate the
-response JSON body using the expected [JSON Schema](http://json-schema.org/). 
-Finally, we validate specific values in the response using 
+response JSON body using the expected [JSON Schema](http://json-schema.org/).
+Finally, we validate specific values in the response using
 [JSONPath](http://goessner.net/articles/JsonPath/)
 
 ## Installation
