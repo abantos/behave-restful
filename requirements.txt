@@ -3,8 +3,9 @@ bolt-ta
 conttest
 coverage
 m2r2
-nose
 pylint
+pytest
+pytest-cov
 sphinx
 sphinx-rtd-theme
 wheel

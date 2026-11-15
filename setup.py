@@ -41,6 +41,7 @@ setup(
     classifiers=about.classifiers,
     packages=packages,
     install_requires=requirements,
+    python_requires='>=3.10',
     entry_points=entry_points,
     package_data=package_data
 )

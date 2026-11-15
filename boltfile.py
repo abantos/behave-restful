@@ -1,4 +1,5 @@
 import os.path
+import sys
 
 import bolt
 import behave_restful.bolt_behave_restful as bolt_br
@@ -30,7 +31,7 @@ bolt.register_task('execute-unit-tests', [
     'mkdir',
     'mkdir.tests',
     'mkdir.tests.coverage',
-    'nose.ci',
+    'shell.pytest.ci',
 ])
 bolt.register_task('execute-feature-tests', [
     'clear-pyc-features',
@@ -49,7 +50,7 @@ bolt.register_task('clear-pyc-features', [
 ])
 bolt.register_task('run-unit-tests', [
     'clear-pyc-testing',
-    'nose',
+    'shell.pytest',
 ])
 bolt.register_task('run-feature-tests', [
     'clear-pyc-features',
@@ -101,17 +102,21 @@ config = {
             'sourcedir': FEATURES_DIR
         }
     },
-    'nose': {
-        'directory': TESTS_DIR,
-        'ci': {
-            'options': {
-                'with-xunit': True,
-                'xunit-file': TESTS_RESULTS_FILE,
-                'with-coverage': True,
-                'cover-erase': True,
-                'cover-package': 'behave_restful',
-                'cover-html-dir': TESTS_COVERAGE_DIR,
-                'cover-branches': True,
+    'shell': {
+        'pytest': {
+            'command': sys.executable,
+            'arguments': ['-m', 'pytest', TESTS_DIR],
+            'ci': {
+                'arguments': [
+                    '-m',
+                    'pytest',
+                    f'--junitxml={TESTS_RESULTS_FILE}',
+                    '--cov=behave_restful',
+                    '--cov-branch',
+                    '--cov-report',
+                    f'html:{TESTS_COVERAGE_DIR}',
+                    TESTS_DIR,
+                ]
             }
         }
     },
